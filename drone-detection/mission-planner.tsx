@@ -1,62 +1,51 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { MapPin, Plus, Trash2 } from "lucide-react"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { MapPin, Plus, Trash2 } from "lucide-react";
 
 interface Waypoint {
-  id: number
-  latitude: number
-  longitude: number
-  altitude: number
+  id: number;
+  latitude: number;
+  longitude: number;
+  altitude: number;
 }
 
-export default function MissionPlanner() {
-  const [waypoints, setWaypoints] = useState<Waypoint[]>([])
+export default function MissionPlannerPage() {
+  const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
   const [newWaypoint, setNewWaypoint] = useState({
     latitude: 0,
     longitude: 0,
-    altitude: 10
-  })
+    altitude: 10,
+  });
 
   const addWaypoint = () => {
     setWaypoints([
       ...waypoints,
-      {
-        id: Date.now(),
-        ...newWaypoint
-      }
-    ])
-    setNewWaypoint({
-      latitude: 0,
-      longitude: 0,
-      altitude: 10
-    })
-  }
+      { id: Date.now(), ...newWaypoint },
+    ]);
+    setNewWaypoint({ latitude: 0, longitude: 0, altitude: 10 });
+  };
 
   const removeWaypoint = (id: number) => {
-    setWaypoints(waypoints.filter(wp => wp.id !== id))
-  }
+    setWaypoints(waypoints.filter((wp) => wp.id !== id));
+  };
 
   const saveMission = async () => {
     try {
       const response = await fetch("/api/missions", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ waypoints })
-      })
-      if (!response.ok) throw new Error("Failed to save mission")
-      // Handle success
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ waypoints }),
+      });
+      if (!response.ok) throw new Error("Failed to save mission");
     } catch (error) {
-      // Handle error
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -72,7 +61,9 @@ export default function MissionPlanner() {
                 id="latitude"
                 type="number"
                 value={newWaypoint.latitude}
-                onChange={e => setNewWaypoint({ ...newWaypoint, latitude: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setNewWaypoint({ ...newWaypoint, latitude: parseFloat(e.target.value) })
+                }
                 step="0.000001"
               />
             </div>
@@ -82,7 +73,9 @@ export default function MissionPlanner() {
                 id="longitude"
                 type="number"
                 value={newWaypoint.longitude}
-                onChange={e => setNewWaypoint({ ...newWaypoint, longitude: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setNewWaypoint({ ...newWaypoint, longitude: parseFloat(e.target.value) })
+                }
                 step="0.000001"
               />
             </div>
@@ -92,7 +85,9 @@ export default function MissionPlanner() {
                 id="altitude"
                 type="number"
                 value={newWaypoint.altitude}
-                onChange={e => setNewWaypoint({ ...newWaypoint, altitude: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setNewWaypoint({ ...newWaypoint, altitude: parseFloat(e.target.value) })
+                }
                 min="0"
                 max="100"
               />
@@ -111,13 +106,17 @@ export default function MissionPlanner() {
         <CardContent>
           <div className="space-y-4">
             {waypoints.map((waypoint, index) => (
-              <div key={waypoint.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div
+                key={waypoint.id}
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+              >
                 <div className="flex items-center space-x-4">
                   <MapPin className="w-5 h-5 text-gray-500" />
                   <div>
                     <div className="font-medium">Waypoint {index + 1}</div>
                     <div className="text-sm text-gray-500">
-                      {waypoint.latitude.toFixed(6)}, {waypoint.longitude.toFixed(6)} - {waypoint.altitude}m
+                      {waypoint.latitude.toFixed(6)}, {waypoint.longitude.toFixed(6)} -{" "}
+                      {waypoint.altitude}m
                     </div>
                   </div>
                 </div>
@@ -145,5 +144,5 @@ export default function MissionPlanner() {
         </CardContent>
       </Card>
     </div>
-  )
-} 
+  );
+}
