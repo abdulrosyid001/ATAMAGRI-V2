@@ -11,6 +11,20 @@ capture and periodically fetch the most recent JPEG frame and prediction.
 This is deliberately lightweight – the heavy GUI / keyboard-control logic that
 exists in the standalone `drone.py` file has been removed to keep the API
 simple. If you need the full desktop view you can still run `python drone.py`.
+
+FastAPI backend exposing plant disease detection from webcam or Tello drone.
+
+Start the server with:
+
+    uvicorn backend.drone_api:app --host 0.0.0.0 --port 8000
+
+The server creates a single global `detector` object that runs inference in the
+background in a dedicated thread. Front-end clients can start or stop the
+capture and periodically fetch the most recent JPEG frame and prediction.
+
+This is deliberately lightweight – the heavy GUI / keyboard-control logic that
+exists in the standalone `drone.py` file has been removed to keep the API
+simple. If you need the full desktop view you can still run `python drone.py`.
 """
 from __future__ import annotations
 
